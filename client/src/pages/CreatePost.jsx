@@ -19,7 +19,7 @@ const CreatePost = () => {
     if(form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch('https://dalle-jh74.onrender.com/api/v1/dalle', {
+        const response = await fetch('http://localhost:8080/api/v1/dalle', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ const CreatePost = () => {
 
         setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}`})
       } catch (error) {
-        alert(error);
+        console.log(error);
       } finally {
         setGeneratingImg(false);
       }
@@ -47,7 +47,10 @@ const CreatePost = () => {
       setLoading(true);
 
       try {
-        const response = await fetch('http://localhost:8080/api/v1/post', {
+        const serverUrl = process.env.NODE_ENV === 'development'
+        ? process.env.REACT_APP_DEV_SERVER_URL
+        : process.env.REACT_APP_PROD_SERVER_URL;
+        const response = await fetch(`${serverUrl}/api/v1/post`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

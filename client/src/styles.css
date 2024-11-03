@@ -1,0 +1,17 @@
+.image-hover:hover .group-hover {
+  display: flex;
+}
+
+.info-hover:hover + .info-hover:opacity-100 {
+  opacity: 1;
+}
+
+/* Add this new CSS rule */
+.icon-hover {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.relative:hover .icon-hover {
+  opacity: 1;
+}

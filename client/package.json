@@ -9,7 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "caniuse-lite": "^1.0.30001677",
     "file-saver": "^2.0.5",
+    "lucide-react": "^0.454.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.6.2"

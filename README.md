@@ -1,6 +1,6 @@
 # dalle
 [On Vercel](https://dalle3.vercel.app/) 
 #### OR
-[Netlify](https://dalle3.netlify.app/)
+[Netlify](https://dalle-server.netlify.app/)
 ######
-[![Netlify Status](https://api.netlify.com/api/v1/badges/3d3331bd-f5fb-4ac3-bf05-8a95d9c56f75/deploy-status)](https://app.netlify.com/sites/dalle007/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/203ec2fb-1ba4-42cb-a7cb-2a4f7a18945d/deploy-status)](https://app.netlify.com/sites/dalle-server/deploys)

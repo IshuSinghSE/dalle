@@ -28,7 +28,7 @@ const Home = () => {
           ? import.meta.env.VITE_DEV_SERVER_URL
           : import.meta.env.VITE_PROD_SERVER_URL;
 
-      const response = await fetch(`${serverUrl}api/v1/post`, {
+      const response = await fetch(`${serverUrl}/api/v1/post`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

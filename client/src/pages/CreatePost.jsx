@@ -47,10 +47,14 @@ const CreatePost = () => {
       setLoading(true);
 
       try {
+<<<<<<< HEAD
         const serverUrl = process.env.NODE_ENV === 'development'
         ? process.env.REACT_APP_DEV_SERVER_URL
         : process.env.REACT_APP_PROD_SERVER_URL;
         const response = await fetch(`${serverUrl}/api/v1/post`, {
+=======
+        const response = await fetch('https://dalle-jh74.onrender.com/api/v1/post', {
+>>>>>>> 6c1e104121c3ab4399c5879bbd089a5b2b98deb7
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

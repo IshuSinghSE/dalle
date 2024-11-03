@@ -7,7 +7,7 @@ const RenderCards = ({ data, title }) => {
   }
 
   return (
-    <h2 className="mt-5 font-bold text-[#6449ff] text-xl uppercase">{title}</h2>
+    <h2 className="mt-5 font-bold text-[#6449ff] text-center text-xl uppercase">{title}</h2>
   );
 };
 
@@ -17,6 +17,7 @@ const Home = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedResults, setSearchedResults] = useState([]);
   const [searchTimeout, setSearchTimeout] = useState(null);
+  const [serverStatus, setServerStatus] = useState(true);
 
   const fetchPosts = useCallback(async () => {
     setLoading(true);
@@ -40,6 +41,7 @@ const Home = () => {
       }
     } catch (error) {
       console.log(error);
+      setServerStatus(false);
     } finally {
       setLoading(false);
     }
@@ -108,7 +110,13 @@ const Home = () => {
                   title="No search results found"
                 />
               ) : (
-                <RenderCards data={allPosts} title="No posts found" />
+                <>
+                  {serverStatus ? (
+                    <RenderCards data={allPosts} title="No posts found" />
+                  ) : (
+                    <RenderCards data={allPosts} title="Server Is Down! 🚫" />
+                  )}
+                </>
               )}
             </div>
           </>

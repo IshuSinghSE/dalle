@@ -14,14 +14,17 @@ const router = express.Router();
 
 // Middleware to serve static files with caching headers
 const oneYear = 365 * 24 * 60 * 60 * 1000; // One year in milliseconds
-router.use('/static', express.static('public', {
-  maxAge: oneYear,
-  setHeaders: (res, path) => {
-    if (path.endsWith('.html')) {
-      res.setHeader('Cache-Control', 'no-cache');
-    }
-  }
-}));
+router.use(
+  "/static",
+  express.static("public", {
+    maxAge: oneYear,
+    setHeaders: (res, path) => {
+      if (path.endsWith(".html")) {
+        res.setHeader("Cache-Control", "no-cache");
+      }
+    },
+  })
+);
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -57,43 +60,56 @@ router.route("/").post(async (req, res) => {
   try {
     const { name, prompt, photo } = req.body;
     const photoUploadResponse = await cloudinary.uploader.upload(photo, {
-      folder: "posts",
+      folder: "dalle",
     });
     const photoUrl = photoUploadResponse.url;
-    const folderName = photoUploadResponse.public_id
-      .split("/")
-      .slice(0, -1)
-      .join("/"); // Get the unique folder path
+    const folderName = "dalle";
 
-    console.log("Cloudinary URL:", photoUrl); // Log the Cloudinary URL
+    // console.log("Cloudinary URL:", photoUrl); // Log the Cloudinary URL
 
     // Create folders if they do not exist
     await createFolderIfNotExists(`${folderName}/thumbnails`);
     await createFolderIfNotExists(`${folderName}/lowres`);
 
-    // Create a low-res blurred image
-    const thumbnailBuffer = await sharp(photoUrl)
-      .resize(100)
-      .blur(10)
-      .toBuffer();
-    const thumbnailUrl = await cloudinary.uploader
-      .upload_stream(
-        { folder: `${folderName}/thumbnails` },
-        (error, result) => {
-          if (error) throw error;
-          return result.url;
-        }
-      )
-      .end(thumbnailBuffer);
+    const response = await axios.get(photoUrl, {
+      responseType: "arraybuffer",
+    });
 
-    // Create a low-res version of the image
-    const lowResBuffer = await sharp(photoUrl).resize(300).toBuffer();
-    const lowResUrl = await cloudinary.uploader
-      .upload_stream({ folder: `${folderName}/lowres` }, (error, result) => {
-        if (error) throw error;
-        return result.url;
-      })
-      .end(lowResBuffer);
+    // console.log("first response", response.data);
+    // Create a low-res blurred thumbnail in WebP format
+    const thumbnailBuffer = await sharp(response.data)
+      .resize(150)
+      .blur(10)
+      .webp({ quality: 80 }) // Reduce quality to decrease size
+      .toBuffer();
+
+    const thumbnailUrl = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: `${folderName}/thumbnails`, format: "webp" },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        }
+      );
+      uploadStream.end(thumbnailBuffer);
+    });
+
+    // Create a low-res version of the image in JPEG format
+    const lowResBuffer = await sharp(response.data)
+      .resize(300, 300) // Maintain good quality resolution
+      .jpeg({ quality: 80 }) // Reduce quality to decrease size
+      .toBuffer();
+
+    const lowResUrl = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: `${folderName}/lowres`, format: "jpeg" },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        }
+      );
+      uploadStream.end(lowResBuffer);
+    });
 
     const newPost = await Post.create({
       name,
@@ -137,7 +153,7 @@ router.route("/temp").get(async (req, res) => {
 
           const thumbnailUrl = await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
-              { folder: `${folderName}/thumbnails`, format: 'webp' },
+              { folder: `${folderName}/thumbnails`, format: "webp" },
               (error, result) => {
                 if (error) return reject(error);
                 resolve(result);
@@ -154,7 +170,7 @@ router.route("/temp").get(async (req, res) => {
 
           const lowResUrl = await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
-              { folder: `${folderName}/lowres`, format: 'jpeg' },
+              { folder: `${folderName}/lowres`, format: "jpeg" },
               (error, result) => {
                 if (error) return reject(error);
                 resolve(result);

@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "build": "npm run build"
+    "build": "echo 'No build step defined'"
   },
   "keywords": [],
   "author": "",

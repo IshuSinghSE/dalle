@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: ["https://dalle3.vercel.app", "localhost:5173"],
+    origin: ["https://dalle3.vercel.app", "http://localhost:5173", "http://localhost:4173"],
   })
 );
 app.use(express.json({ limit: "50mb" }));

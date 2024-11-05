@@ -85,7 +85,7 @@ const CreatePost = () => {
   };
 
   return (
-    <section className="max-w-7xl mx-auto">
+    <section className="max-w-7xl mx-auto w-11/12 md:w-10/12  md:translate-x-[-50%] md:translate-y-[-50%] md:top-1/2 md:left-1/2 md:absolute">
       <div>
         <h1 className="font-extrabold text-[#222328] text-[32px]">Create</h1>
         <p className="mt-2 text-[#666e75] text-[16px] max-w[500px]">
@@ -94,28 +94,50 @@ const CreatePost = () => {
         </p>
       </div>
 
-      <form className="mt-16 max-w-3xl" onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-5">
-          <FormField
-            labelName="Your name"
-            type="text"
-            name="name"
-            placeholder="John Doe"
-            value={form.name}
-            handleChange={handleChange}
-          />
-          <FormField
-            labelName="Prompt"
-            type="text"
-            name="prompt"
-            placeholder="A plush toy robot sitting against a yellow wall"
-            value={form.prompt}
-            handleChange={handleChange}
-            isSurpriseMe
-            handleSurpriseMe={handleSurpriseMe}
-          />
+      <form className="mt-12 max-w-8xl lg:max-w-4/5" onSubmit={handleSubmit}>
+        <div className="flex flex-col md:flex-row gap-8 md:gap-20 justify-center items-center">
+          <div className="flex flex-col gap-5 md:gap-6 w-full md:w-1/2">
+            <FormField
+              labelName="Your name"
+              type="text"
+              name="name"
+              placeholder="John Doe"
+              value={form.name}
+              handleChange={handleChange}
+            />
+            <FormField
+              labelName="Prompt"
+              type="text"
+              name="prompt"
+              placeholder="A plush toy robot sitting against a yellow wall"
+              value={form.prompt}
+              handleChange={handleChange}
+              isSurpriseMe
+              handleSurpriseMe={handleSurpriseMe}
+            />
 
-          <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center">
+            <div className="flex gap-5 justify-center w-full">
+              <button
+                type="button"
+                onClick={generateImage}
+                disabled={true}
+                className="text-white bg-green-700 disabled:bg-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex-1"
+              >
+                {generatingImg ? "Generating..." : "Generate"}
+              </button>
+              <button
+                type="submit"
+                className="text-white bg-[#6469ff] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center flex-1"
+              >
+                {loading ? "Sharing..." : "Share with community"}
+              </button>
+            </div>
+            <p className="mt-2 text-[#666e75] text-[14px]">
+            You can share it with others in the community
+          </p>
+          </div>
+
+          <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 w-full md:w-auto p-3 flex justify-center items-center">
             {form.photo ? (
               <img
                 src={form.photo}
@@ -138,29 +160,12 @@ const CreatePost = () => {
           </div>
         </div>
 
-        <div className="mt-5 flex gap-5">
-          <button
-            type="button"
-            onClick={generateImage}
-            disabled={true}
-            className="text-white bg-green-700 disabled:bg-green-300 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-          >
-            {generatingImg ? "Generating..." : "Generate"}
-          </button>
-          <p className="text-sm text-red-600 font-semibold">Currently, the image generation is not working. We will fix it soon. You can look at already generated images for now.</p>
-        </div>
-
-        <div className="mt-10">
-          <p className="mt-2 text-[#666e75] text-[14px]">
-            Once you have created the image you want, you can share it with
-            others in the community
+        <div className="mt-10 w-full">
+          
+          <p className="text-sm text-red-600 font-semibold">
+            Currently, the image generation is not working. We will fix it soon.
+            You can look at already generated images for now.
           </p>
-          <button
-            type="submit"
-            className="mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-          >
-            {loading ? "Sharing..." : "Share with the community"}
-          </button>
         </div>
       </form>
     </section>

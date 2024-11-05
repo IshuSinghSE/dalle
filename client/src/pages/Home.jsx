@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Loader, Card, FormField } from "../components";
+import { Search } from "lucide-react";
 
 const RenderCards = ({ data, title }) => {
   if (data?.length > 0) {
@@ -7,7 +8,9 @@ const RenderCards = ({ data, title }) => {
   }
 
   return (
-    <h2 className="mt-5 font-bold text-[#6449ff] text-center text-xl uppercase">{title}</h2>
+    <div className="mt-5 w-screen">
+      <h2 className="font-bold text-[#6449ff] text-xl uppercase">{title}</h2>
+    </div>
   );
 };
 
@@ -79,7 +82,7 @@ const Home = () => {
         </p>
       </div>
 
-      <div className="mt-16">
+      <div className="mt-16 relative">
         <FormField
           labelName="Search posts"
           type="text"
@@ -87,7 +90,11 @@ const Home = () => {
           placeholder="Search posts"
           value={searchText}
           handleChange={handleSearchChange}
+          icon={<Search className="w-5 h-5 "/>}
         />
+
+        {/*  */}
+
       </div>
 
       <div className="mt-10">
